@@ -317,6 +317,7 @@ export function drawRoute(destinationName) {
     }
 
     const origin = lastFetchedPosition || currentPositionMarker.getPosition();
+    clearRoute(); // Clear any existing routes first
 
     // Try to find destination coordinates
     const allMarkers = [...markers, ...customMarkers];
@@ -325,13 +326,13 @@ export function drawRoute(destinationName) {
     let destinationLocation;
     if (marker) {
         destinationLocation = marker.getPosition();
-        calculateAndDisplayRoute(origin, destinationLocation);
+        calculateAndDisplayMultipleRoutes(origin, destinationLocation);
     } else {
         // If not in known markers, geocode it
         geocoder.geocode({ address: destinationName }, (results, status) => {
             if (status === 'OK' && results[0]) {
                 destinationLocation = results[0].geometry.location;
-                calculateAndDisplayRoute(origin, destinationLocation);
+                calculateAndDisplayMultipleRoutes(origin, destinationLocation);
             } else {
                 console.error('Geocode was not successful: ' + status);
             }
@@ -339,35 +340,52 @@ export function drawRoute(destinationName) {
     }
 }
 
-function calculateAndDisplayRoute(origin, destination) {
-    if (!directionsService || !directionsRenderer) return;
+// Store multiple renderers
+let routeRenderers = [];
+
+function calculateAndDisplayMultipleRoutes(origin, destination) {
+    if (!directionsService) return;
     
+    // TRANSIT (Bus/Train) -> Blue
+    displaySingleRoute(origin, destination, google.maps.TravelMode.TRANSIT, '#3b82f6', false);
+    
+    // DRIVING (Taxi/Car) -> Orange
+    displaySingleRoute(origin, destination, google.maps.TravelMode.DRIVING, '#f97316', true);
+    
+    // WALKING -> Green
+    displaySingleRoute(origin, destination, google.maps.TravelMode.WALKING, '#22c55e', true);
+}
+
+function displaySingleRoute(origin, destination, mode, color, suppressMarkers) {
     directionsService.route({
         origin: origin,
         destination: destination,
-        travelMode: google.maps.TravelMode.TRANSIT
+        travelMode: mode
     }, (response, status) => {
         if (status === 'OK') {
-            directionsRenderer.setDirections(response);
-        } else if (status === 'ZERO_RESULTS') {
-            // Fallback to driving if transit not found
-            directionsService.route({
-                origin: origin,
-                destination: destination,
-                travelMode: google.maps.TravelMode.DRIVING
-            }, (res, stat) => {
-                if (stat === 'OK') {
-                    directionsRenderer.setDirections(res);
+            const renderer = new google.maps.DirectionsRenderer({
+                map: map,
+                suppressMarkers: suppressMarkers,
+                polylineOptions: {
+                    strokeColor: color,
+                    strokeOpacity: 0.7,
+                    strokeWeight: 6
                 }
             });
+            renderer.setDirections(response);
+            routeRenderers.push(renderer);
         }
     });
 }
 
 export function clearRoute() {
+    // Legacy support for single renderer
     if (directionsRenderer) {
         directionsRenderer.setDirections({routes: []});
     }
+    // Clear all multi-mode renderers
+    routeRenderers.forEach(r => r.setMap(null));
+    routeRenderers = [];
 }
 window.drawRoute = drawRoute;
 window.clearRoute = clearRoute;

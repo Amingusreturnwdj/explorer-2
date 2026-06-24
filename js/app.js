@@ -227,8 +227,16 @@ function formatAIResponse(text) {
         if (window.drawRoute) {
             window.drawRoute(destination);
         }
-        // Remove the tag from displayed text
-        formattedText = formattedText.replace(routeRegex, `<br><button onclick="window.clearRoute()" style="background:#ef4444; color:white; border:none; border-radius:4px; font-size:0.8rem; padding: 4px 8px; margin-top:5px; cursor:pointer;"><i class="fa-solid fa-eraser"></i> ลบเส้นทางบนแผนที่</button>`);
+        const legend = `
+            <div style="margin-top: 10px; font-size: 0.8rem; background: #f3f4f6; padding: 8px; border-radius: 8px; line-height: 1.6; color: #333;">
+                <strong><i class="fa-solid fa-map-location-dot"></i> สีเส้นทางบนแผนที่:</strong><br>
+                <span style="color:#3b82f6; font-weight:bold;">■ สีน้ำเงิน</span>: รถเมล์ / รถตู้ (Transit)<br>
+                <span style="color:#f97316; font-weight:bold;">■ สีส้ม</span>: รถยนต์ / แท็กซี่ / มอเตอร์ไซค์ (Driving)<br>
+                <span style="color:#22c55e; font-weight:bold;">■ สีเขียว</span>: เดินเท้า (Walking)
+            </div>
+        `;
+        // Remove the tag from displayed text and append the clear button + legend
+        formattedText = formattedText.replace(routeRegex, `<br><button onclick="window.clearRoute()" style="background:#ef4444; color:white; border:none; border-radius:4px; font-size:0.8rem; padding: 6px 10px; margin-top:5px; cursor:pointer;"><i class="fa-solid fa-eraser"></i> ลบเส้นทาง</button>${legend}`);
     }
 
     formattedText = formattedText.replace(/\n/g, '<br>');
