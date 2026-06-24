@@ -418,3 +418,20 @@ input[readonly] {
         justify-content: space-between;
     }
 }
+
+/* AI Chat Place Highlight */
+.highlight-place {
+    color: var(--primary);
+    font-weight: 600;
+    text-decoration: underline;
+    text-decoration-style: dotted;
+    cursor: pointer;
+    background: rgba(79, 70, 229, 0.1);
+    padding: 0 4px;
+    border-radius: 4px;
+    transition: all 0.2s ease;
+}
+.highlight-place:hover {
+    background: rgba(79, 70, 229, 0.2);
+    color: var(--primary-dark);
+}

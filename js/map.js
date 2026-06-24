@@ -278,3 +278,27 @@ export function renderCustomPlaces(places, currentUserId) {
         customMarkers.push(marker);
     });
 }
+
+export function getKnownPlaceNames() {
+    const names = [];
+    markers.forEach(m => { if (m.title) names.push(m.title); });
+    customMarkers.forEach(m => { if (m.title) names.push(m.title); });
+    // Unique and sort by length descending to prevent nested replacements
+    return [...new Set(names)].sort((a, b) => b.length - a.length);
+}
+
+export function focusOnPlace(name) {
+    const allMarkers = [...markers, ...customMarkers];
+    const marker = allMarkers.find(m => m.title && m.title.toLowerCase() === name.toLowerCase());
+    if (marker) {
+        map.panTo(marker.getPosition());
+        map.setZoom(18);
+        google.maps.event.trigger(marker, 'click');
+        
+        // On mobile, maybe close the AI sidebar so user can see the map
+        if (window.innerWidth < 768) {
+            document.getElementById('ai-sidebar').classList.add('closed');
+        }
+    }
+}
+window.focusOnPlace = focusOnPlace;

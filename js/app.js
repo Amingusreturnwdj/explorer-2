@@ -1,4 +1,4 @@
-import { loadGoogleMaps, toggleTrackingLocation, renderCustomPlaces } from './map.js';
+import { loadGoogleMaps, toggleTrackingLocation, renderCustomPlaces, getKnownPlaceNames } from './map.js';
 import { initAuth, login, logout, listenToPlaces, addPlace, updatePlace, deletePlace, currentUser } from './firebase.js';
 import { askAI, updateAIContextCustomPlaces } from './ai.js';
 import { applyTranslations, currentLang, setLanguage, t } from './i18n.js';
@@ -216,10 +216,35 @@ function openPlaceModal(place = null, lat = null, lng = null) {
 }
 
 // AI Chat Logic
+function formatAIResponse(text) {
+    let formattedText = text;
+    formattedText = formattedText.replace(/\n/g, '<br>');
+    
+    // Highlight and link places
+    const placeNames = getKnownPlaceNames();
+    placeNames.forEach(name => {
+        if (name.length < 3) return; // Ignore very short names to prevent false positives
+        const escapedName = name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+        const jsSafeName = name.replace(/'/g, "\\'");
+        
+        // This regex ensures we don't replace inside existing HTML tags
+        const regex = new RegExp(`(${escapedName})(?![^<]*>|[^<>]*<\\/)`, 'gi');
+        formattedText = formattedText.replace(regex, `<span class="highlight-place" onclick="window.focusOnPlace('${jsSafeName}')">$1</span>`);
+    });
+    
+    return formattedText;
+}
+
 function appendMessage(sender, text) {
     const msgDiv = document.createElement('div');
     msgDiv.className = `message ${sender}`;
-    msgDiv.innerHTML = `<div class="msg-bubble">${text.replace(/\\n/g, '<br>')}</div>`;
+    
+    if (sender === 'ai') {
+        msgDiv.innerHTML = `<div class="msg-bubble">${formatAIResponse(text)}</div>`;
+    } else {
+        msgDiv.innerHTML = `<div class="msg-bubble">${text.replace(/\n/g, '<br>')}</div>`;
+    }
+    
     chatContainer.appendChild(msgDiv);
     chatContainer.scrollTop = chatContainer.scrollHeight;
 }
