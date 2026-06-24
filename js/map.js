@@ -24,9 +24,7 @@ window.initMap = function() {
         zoomControl: true,
     });
 
-    if (localStorage.getItem('theme') === 'dark' && typeof darkMapStyle !== 'undefined') {
-        map.setOptions({ styles: darkMapStyle });
-    }
+
 
     infoWindow = new google.maps.InfoWindow();
     placesService = new google.maps.places.PlacesService(map);
