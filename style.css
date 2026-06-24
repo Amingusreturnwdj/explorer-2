@@ -11,8 +11,24 @@
     --glass-bg: rgba(255, 255, 255, 0.85);
     --glass-border: rgba(255, 255, 255, 0.3);
     --glass-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.15);
+    --card-bg: #ffffff;
+    --input-bg: rgba(255, 255, 255, 0.5);
+    --border-color: rgba(0,0,0,0.05);
+    --msg-ai-bg: #ffffff;
     --font-ui: 'Inter', sans-serif;
     --font-thai: 'Prompt', sans-serif;
+}
+
+[data-theme="dark"] {
+    --bg-light: #111827;
+    --text-dark: #F9FAFB;
+    --glass-bg: rgba(31, 41, 55, 0.85);
+    --glass-border: rgba(255, 255, 255, 0.1);
+    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
+    --card-bg: #1F2937;
+    --input-bg: rgba(31, 41, 55, 0.5);
+    --border-color: rgba(255,255,255,0.1);
+    --msg-ai-bg: #374151;
 }
 
 * {
@@ -145,7 +161,7 @@ button {
     width: 40px;
     height: 40px;
     border-radius: 50%;
-    background-color: white;
+    background-color: var(--card-bg);
     color: var(--text-dark);
     display: flex;
     align-items: center;
@@ -214,7 +230,7 @@ button {
 
 .sidebar-header {
     padding: 15px 20px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -262,7 +278,7 @@ button {
 }
 
 .message.ai .msg-bubble {
-    background-color: white;
+    background-color: var(--card-bg);
     border-bottom-left-radius: 4px;
     box-shadow: 0 4px 10px rgba(0,0,0,0.08);
 }
@@ -276,10 +292,10 @@ button {
 
 .chat-input-container {
     padding: 15px;
-    border-top: 1px solid rgba(0,0,0,0.05);
+    border-top: 1px solid var(--border-color);
     display: flex;
     gap: 10px;
-    background-color: rgba(255,255,255,0.5);
+    background-color: var(--input-bg);
 }
 
 #chat-input {
@@ -287,7 +303,7 @@ button {
     border: none;
     border-radius: 20px;
     padding: 10px 15px;
-    background-color: white;
+    background-color: var(--card-bg);
     box-shadow: inset 0 1px 3px rgba(0,0,0,0.1);
     font-family: var(--font-thai);
     outline: none;
@@ -313,7 +329,7 @@ button {
 }
 
 .modal-content {
-    background: white;
+    background: var(--card-bg);
     width: 90%;
     max-width: 400px;
     border-radius: 20px;
@@ -342,7 +358,7 @@ button {
 
 .modal-header {
     padding: 20px;
-    border-bottom: 1px solid rgba(0,0,0,0.05);
+    border-bottom: 1px solid var(--border-color);
     display: flex;
     justify-content: space-between;
     align-items: center;
@@ -476,4 +492,33 @@ input[readonly] {
     color: var(--primary-dark);
     transform: scale(1.1) translateY(-2px);
     box-shadow: 0 4px 10px rgba(79, 70, 229, 0.3);
+}
+
+/* Theme Toggle Floating Button */
+.floating-btn {
+    position: fixed;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: var(--card-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+    box-shadow: 0 4px 15px rgba(0,0,0,0.1);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 1.2rem;
+    cursor: pointer;
+    z-index: 1000;
+    transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
+}
+
+.floating-btn:hover {
+    transform: translateY(-3px) scale(1.05);
+    box-shadow: 0 6px 20px rgba(0,0,0,0.15);
+}
+
+.floating-btn.bottom-left {
+    bottom: 25px;
+    left: 25px;
 }
