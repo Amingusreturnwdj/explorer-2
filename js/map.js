@@ -57,8 +57,8 @@ window.initMap = function() {
         });
 
         const content = `
-            <div style="padding: 5px; color: #333; text-align: center; min-width: 150px; font-family:var(--font-thai);">
-                <h3 style="margin: 0 0 12px 0; font-size: 1rem; color: #111827;"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> พิกัดที่คุณเลือก</h3>
+            <div style="padding: 5px; color: var(--text-dark); text-align: center; min-width: 150px; font-family:var(--font-thai);">
+                <h3 style="margin: 0 0 12px 0; font-size: 1rem; color: var(--text-dark);"><i class="fa-solid fa-location-dot" style="color:var(--primary);"></i> พิกัดที่คุณเลือก</h3>
                 <button onclick="window.drawRouteToLatLng(${lat}, ${lng})" style="background:var(--primary); color:white; border:none; padding:8px 12px; border-radius:6px; cursor:pointer; margin-bottom:8px; width:100%; transition:all 0.2s; font-weight:bold;">
                     <i class="fa-solid fa-route"></i> นำทางมาที่นี่
                 </button>
@@ -242,7 +242,7 @@ function createMarker(place) {
                     content += `<p style="margin: 0 0 5px 0;">⭐ ${placeDetails.rating} / 5</p>`;
                 }
                 if (placeDetails.formatted_address) {
-                    content += `<p style="margin: 0 0 10px 0; font-size: 0.85rem; color: #666;">${placeDetails.formatted_address}</p>`;
+                    content += `<p style="margin: 0 0 10px 0; font-size: 0.85rem; color: var(--text-muted);">${placeDetails.formatted_address}</p>`;
                 }
                 if (placeDetails.reviews && placeDetails.reviews.length > 0) {
                     const review = placeDetails.reviews[0];
@@ -296,7 +296,7 @@ export function renderCustomPlaces(places, currentUserId) {
                 <div style="max-width: 250px; font-family: 'Prompt', sans-serif;">
                     <h3 style="margin: 0 0 5px 0; color: #10B981; font-size: 1.1rem;">${place.name}</h3>
                     <p style="margin: 0 0 5px 0; font-size: 0.9rem;">${place.description || t('no_details')}</p>
-                    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: #666;">${t('added_by')}: ${place.userName || 'Unknown'}</p>
+                    <p style="margin: 0 0 10px 0; font-size: 0.8rem; color: var(--text-muted);">${t('added_by')}: ${place.userName || 'Unknown'}</p>
                     <button onclick="window.askAIAvoidingGlobal('${place.name.replace(/'/g, "\\'")}')" 
                             style="margin-bottom: 10px; background: #4F46E5; color: white; border: none; padding: 5px 10px; border-radius: 4px; cursor: pointer; width: 100%; font-family: 'Prompt', sans-serif;">
                         <i class="fa-solid fa-robot"></i> ${t('ask_ai_btn')}
@@ -471,25 +471,25 @@ window.clearRoute = clearRoute;
 const darkMapStyle = [
   { elementType: "geometry", stylers: [{ color: "#212121" }] },
   { elementType: "labels.icon", stylers: [{ visibility: "off" }] },
-  { elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
-  { elementType: "labels.text.stroke", stylers: [{ color: "#212121" }] },
+  { elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
+  { elementType: "labels.text.stroke", stylers: [{ color: "#000000" }] },
   { featureType: "administrative", elementType: "geometry", stylers: [{ color: "#757575" }] },
-  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#9e9e9e" }] },
+  { featureType: "administrative.country", elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
   { featureType: "administrative.land_parcel", stylers: [{ visibility: "off" }] },
-  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#bdbdbd" }] },
-  { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+  { featureType: "administrative.locality", elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
+  { featureType: "poi", elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
   { featureType: "poi.park", elementType: "geometry", stylers: [{ color: "#181818" }] },
-  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-  { featureType: "poi.park", elementType: "labels.text.stroke", stylers: [{ color: "#1b1b1b" }] },
+  { featureType: "poi.park", elementType: "labels.text.fill", stylers: [{ color: "#dddddd" }] },
+  { featureType: "poi.park", elementType: "labels.text.stroke", stylers: [{ color: "#000000" }] },
   { featureType: "road", elementType: "geometry.fill", stylers: [{ color: "#2c2c2c" }] },
-  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#8a8a8a" }] },
+  { featureType: "road", elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
   { featureType: "road.arterial", elementType: "geometry", stylers: [{ color: "#373737" }] },
   { featureType: "road.highway", elementType: "geometry", stylers: [{ color: "#3c3c3c" }] },
   { featureType: "road.highway.controlled_access", elementType: "geometry", stylers: [{ color: "#4e4e4e" }] },
-  { featureType: "road.local", elementType: "labels.text.fill", stylers: [{ color: "#616161" }] },
-  { featureType: "transit", elementType: "labels.text.fill", stylers: [{ color: "#757575" }] },
+  { featureType: "road.local", elementType: "labels.text.fill", stylers: [{ color: "#dddddd" }] },
+  { featureType: "transit", elementType: "labels.text.fill", stylers: [{ color: "#ffffff" }] },
   { featureType: "water", elementType: "geometry", stylers: [{ color: "#000000" }] },
-  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#3d3d3d" }] }
+  { featureType: "water", elementType: "labels.text.fill", stylers: [{ color: "#dddddd" }] }
 ];
 
 export function setMapTheme(isDark) {

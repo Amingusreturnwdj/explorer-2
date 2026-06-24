@@ -5,6 +5,7 @@
     --bg-dark: #1F2937;
     --bg-light: #F3F4F6;
     --text-dark: #111827;
+    --text-muted: #6B7280;
     --text-light: #F9FAFB;
     --danger: #EF4444;
     --danger-hover: #DC2626;
@@ -22,6 +23,7 @@
 [data-theme="dark"] {
     --bg-light: #111827;
     --text-dark: #F9FAFB;
+    --text-muted: #9CA3AF;
     --glass-bg: rgba(31, 41, 55, 0.85);
     --glass-border: rgba(255, 255, 255, 0.1);
     --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
@@ -68,7 +70,7 @@ body, html {
 /* Typography & Colors */
 .text-primary { color: var(--primary); }
 .text-danger { color: var(--danger); }
-.text-muted { color: #6B7280; }
+.text-muted { color: var(--text-muted); }
 .text-sm { font-size: 0.875rem; }
 .mt-2 { margin-top: 1rem; }
 .hidden { display: none !important; }
@@ -537,4 +539,13 @@ input[readonly] {
 .floating-btn.bottom-left {
     bottom: 25px;
     left: 25px;
+}
+
+/* Google Maps InfoWindow Dark Mode Fix */
+.gm-style .gm-style-iw-c {
+    background-color: var(--card-bg) !important;
+    color: var(--text-dark) !important;
+}
+.gm-style .gm-style-iw-tc::after {
+    background: var(--card-bg) !important;
 }
