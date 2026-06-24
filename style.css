@@ -20,18 +20,7 @@
     --font-thai: 'Prompt', sans-serif;
 }
 
-[data-theme="dark"] {
-    --bg-light: #111827;
-    --text-dark: #F9FAFB;
-    --text-muted: #9CA3AF;
-    --glass-bg: rgba(31, 41, 55, 0.85);
-    --glass-border: rgba(255, 255, 255, 0.1);
-    --glass-shadow: 0 8px 32px 0 rgba(0, 0, 0, 0.4);
-    --card-bg: #1F2937;
-    --input-bg: rgba(31, 41, 55, 0.5);
-    --border-color: rgba(255,255,255,0.1);
-    --msg-ai-bg: #374151;
-}
+
 
 * {
     box-sizing: border-box;
@@ -541,11 +530,3 @@ input[readonly] {
     left: 25px;
 }
 
-/* Google Maps InfoWindow Dark Mode Fix */
-.gm-style .gm-style-iw-c {
-    background-color: var(--card-bg) !important;
-    color: var(--text-dark) !important;
-}
-.gm-style .gm-style-iw-tc::after {
-    background: var(--card-bg) !important;
-}

@@ -72,32 +72,7 @@ function setupEventListeners() {
         setLanguage(newLang);
     });
 
-    // Theme Toggle
-    const btnThemeToggle = document.getElementById('btn-theme-toggle');
-    const iconTheme = btnThemeToggle.querySelector('i');
-    
-    // Initialize Theme
-    const savedTheme = localStorage.getItem('theme') || 'light';
-    if (savedTheme === 'dark') {
-        document.documentElement.setAttribute('data-theme', 'dark');
-        iconTheme.classList.replace('fa-moon', 'fa-sun');
-        setTimeout(() => { if(window.setMapTheme) window.setMapTheme(true); }, 1000);
-    }
 
-    btnThemeToggle.addEventListener('click', () => {
-        const currentTheme = document.documentElement.getAttribute('data-theme');
-        if (currentTheme === 'dark') {
-            document.documentElement.removeAttribute('data-theme');
-            localStorage.setItem('theme', 'light');
-            iconTheme.classList.replace('fa-sun', 'fa-moon');
-            if (window.setMapTheme) window.setMapTheme(false);
-        } else {
-            document.documentElement.setAttribute('data-theme', 'dark');
-            localStorage.setItem('theme', 'dark');
-            iconTheme.classList.replace('fa-moon', 'fa-sun');
-            if (window.setMapTheme) window.setMapTheme(true);
-        }
-    });
 
     // Auth
     btnLogin.addEventListener('click', async () => {
