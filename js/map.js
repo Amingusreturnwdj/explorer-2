@@ -1,5 +1,5 @@
 import { CONFIG } from './config.js';
-import { updateAIContextLocation } from './ai.js';
+import { updateAIContextLocation, updateAIContextPlaces } from './ai.js';
 
 let map;
 let placesService;
@@ -114,6 +114,8 @@ export function searchNearbyPlaces(location) {
             for (let i = 0; i < Math.min(results.length, 20); i++) {
                 createMarker(results[i]);
             }
+            // Send the results to AI context
+            updateAIContextPlaces(results);
         }
     });
 }

@@ -9,9 +9,63 @@ let chatHistory = [
     { role: "system", content: BASE_SYSTEM_PROMPT }
 ];
 
+let aiContextState = {
+    address: "ไม่ระบุตำแหน่ง",
+    lat: null,
+    lng: null,
+    nearbyPlaces: [],
+    customPlaces: []
+};
+
 export function updateAIContextLocation(address, lat, lng) {
-    const locationContext = `\n\n[ข้อมูลระบบ: ขณะนี้ผู้ใช้งานอยู่ที่ตำแหน่ง/บริเวณ "${address}" (Lat: ${lat}, Lng: ${lng}) ให้แนะนำสถานที่บริเวณนี้หากผู้ใช้ถามหาสถานที่ใกล้เคียง]`;
-    chatHistory[0].content = BASE_SYSTEM_PROMPT + locationContext;
+    aiContextState.address = address;
+    aiContextState.lat = lat;
+    aiContextState.lng = lng;
+    rebuildSystemPrompt();
+}
+
+export function updateAIContextPlaces(places) {
+    aiContextState.nearbyPlaces = places.map(p => ({
+        name: p.name,
+        rating: p.rating || "ไม่มี"
+    }));
+    rebuildSystemPrompt();
+}
+
+export function updateAIContextCustomPlaces(places) {
+    aiContextState.customPlaces = places.map(p => ({
+        name: p.name,
+        description: p.description || "ไม่มีรายละเอียด"
+    }));
+    rebuildSystemPrompt();
+}
+
+function rebuildSystemPrompt() {
+    let context = `\n\n[ข้อมูลระบบเพื่อใช้ประกอบการตอบคำถาม]:\n`;
+    if (aiContextState.lat !== null) {
+        context += `- ตำแหน่งผู้ใช้งานปัจจุบัน: บริเวณ "${aiContextState.address}" (พิกัด Lat: ${aiContextState.lat}, Lng: ${aiContextState.lng})\n`;
+    }
+    
+    context += `- สถานที่และร้านอาหารรอบๆ ผู้ใช้ตอนนี้ (ข้อมูลจาก Google Maps):\n`;
+    if (aiContextState.nearbyPlaces.length > 0) {
+        // จำกัดแค่ 10 ที่เพื่อไม่ให้ context ยาวเกินไป
+        aiContextState.nearbyPlaces.slice(0, 10).forEach((p, i) => {
+            context += `  ${i+1}. ${p.name} (ดาว: ${p.rating})\n`;
+        });
+    } else {
+        context += `  (กำลังค้นหาหรือไม่มีข้อมูล)\n`;
+    }
+
+    if (aiContextState.customPlaces.length > 0) {
+        context += `- สถานที่พิเศษที่ถูกเพิ่มไว้ในฐานข้อมูลแอพ (Local Database):\n`;
+        aiContextState.customPlaces.slice(0, 10).forEach((p, i) => {
+            context += `  * ${p.name} (รายละเอียด: ${p.description})\n`;
+        });
+    }
+
+    context += `\n**คำสั่งสำคัญ**: \n1. ให้คุณอ้างอิงรายชื่อสถานที่ด้านบนนี้ในการแนะนำผู้ใช้เป็นหลัก เพราะเป็นสถานที่ที่มีอยู่จริงบนแผนที่รอบๆ ตัวผู้ใช้\n2. หากผู้ใช้ถามถึงสถานที่เจาะจง ให้ข้อมูลบรรยากาศและข้อแนะนำ หากเป็นสถานที่ในรายการข้างต้นให้ชื่นชมและสนับสนุนให้ไป`;
+    
+    chatHistory[0].content = BASE_SYSTEM_PROMPT + context;
 }
 
 export async function askAI(message, onMessageReceived, onError) {

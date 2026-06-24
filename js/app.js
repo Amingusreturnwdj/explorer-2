@@ -1,6 +1,6 @@
 import { loadGoogleMaps, getCurrentLocation, renderCustomPlaces } from './map.js';
 import { initAuth, login, logout, listenToPlaces, addPlace, updatePlace, deletePlace, currentUser } from './firebase.js';
-import { askAI } from './ai.js';
+import { askAI, updateAIContextCustomPlaces } from './ai.js';
 
 // DOM Elements
 const btnLogin = document.getElementById('btn-login');
@@ -56,6 +56,7 @@ function init() {
         customPlacesData = places;
         const uid = currentUser ? currentUser.uid : null;
         renderCustomPlaces(places, uid);
+        updateAIContextCustomPlaces(places);
     });
 
     setupEventListeners();
